@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        /* Estilos CSS para la página de error */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #dc3545;
+        }
+
+        p {
+            color: #333;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <h1>Error</h1>
+    <p>Something went wrong</p>
+    <p>Error detail:</p>
+    <pre th:text="${errorMessage}"></pre>
+
+    <p>Traceback:</p>
+    <pre th:text="${errorStackTrace}"></pre>
+    <p>TornadoCore - developed by EzTornado</p>
+</div>
+</body>
+</html>
