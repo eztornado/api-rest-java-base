@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDto.getUsername());
         user.setActive(userDto.getActive());
         user.setPassword( new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        user.setRoles(userDto.getRoles());
 
         // Guardar el usuario en la base de datos
         return userRepository.save(user);
@@ -111,6 +112,7 @@ public class UserServiceImpl implements UserService {
         if(userDto.getPassword() != null) {
             user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         }
+        user.setRoles(userDto.getRoles());
         return userRepository.save(user);
     }
 }

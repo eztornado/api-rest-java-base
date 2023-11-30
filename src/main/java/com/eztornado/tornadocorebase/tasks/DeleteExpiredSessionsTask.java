@@ -46,10 +46,10 @@ public class DeleteExpiredSessionsTask implements Task {
                 dto.setDeleted_at(new Date());
                 dto.setUser(userDetails);
                 service.save(session.getId(), dto);
-                System.out.println("DeleteExpiredSessionsTask -  Session ID: " + session.getId() + "has marked as finished");
+                System.out.println("DeleteExpiredSessionsTask -  Session ID: " + session.getId() + " has marked as finished");
             } else {
                 service.delete(session.getId());
-                System.out.println("DeleteExpiredSessionsTask -  Session ID: " + session.getId() + "has marked as finished");
+                System.out.println("DeleteExpiredSessionsTask -  Session ID: " + session.getId() + " has marked as finished");
             }
         }
 

@@ -21,7 +21,7 @@ public class CorsConfiguration {
                         .allowCredentials(false); // if you need credentials
 
                 registry.addMapping("/api/**") // or specify a path pattern for more granular control
-                        .allowedOrigins("*") // the front-end server address
+                        .allowedOrigins("http://localhost:8080") // the front-end server address
                         .allowedMethods("GET", "POST", "PUT", "DELETE") // allowed HTTP methods
                         .allowedHeaders("*") // allowed headers
                         .allowCredentials(true); // if you need credentials

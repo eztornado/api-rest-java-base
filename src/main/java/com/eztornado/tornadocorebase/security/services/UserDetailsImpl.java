@@ -116,4 +116,17 @@ public class UserDetailsImpl implements UserDetails {
     UserDetailsImpl user = (UserDetailsImpl) o;
     return Objects.equals(id, user.id);
   }
+
+  public String getMainRole() {
+    // Comprueba si la colección no está vacía y devuelve el nombre del primer rol
+    if (authorities != null && !authorities.isEmpty()) {
+      // Obtén el primer elemento de la colección
+      GrantedAuthority firstAuthority = authorities.iterator().next();
+      // Devuelve su nombre
+      return firstAuthority.getAuthority();
+    } else {
+      // Si no hay roles, podría devolver null o alguna otra representación adecuada
+      return null; // O podrías lanzar una excepción si se espera que siempre haya al menos un rol.
+    }
+  }
 }

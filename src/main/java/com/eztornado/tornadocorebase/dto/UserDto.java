@@ -1,8 +1,11 @@
 package com.eztornado.tornadocorebase.dto;
 
+import com.eztornado.tornadocorebase.models.Role;
 import com.eztornado.tornadocorebase.models.User;
 import com.eztornado.tornadocorebase.security.services.UserDetailsImpl;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.HashSet;
 
 public class UserDto {
 
@@ -13,6 +16,8 @@ public class UserDto {
     private String username;
     private Boolean active = false;
     private String password;
+
+    private HashSet<Role> roles;
     // otros campos...
 
     // Getters y setters...
@@ -56,6 +61,14 @@ public class UserDto {
         this.id = id;
     }
 
+    public HashSet<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(HashSet<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -81,5 +94,9 @@ public class UserDto {
         this.password = user.getPassword();
         this.active = user.isActive();
         this.email = user.getEmail();
+    }
+
+    public UserDto() {
+        // Constructor predeterminado
     }
 }

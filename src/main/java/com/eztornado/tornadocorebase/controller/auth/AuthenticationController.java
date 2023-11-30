@@ -4,9 +4,8 @@ import com.eztornado.tornadocorebase.controller.BaseController;
 import com.eztornado.tornadocorebase.dto.RecoveryPasswordDto;
 import com.eztornado.tornadocorebase.dto.SessionDto;
 import com.eztornado.tornadocorebase.dto.UserDto;
-import com.eztornado.tornadocorebase.models.RecoveryPassword;
-import com.eztornado.tornadocorebase.models.Session;
-import com.eztornado.tornadocorebase.models.User;
+import com.eztornado.tornadocorebase.exceptions.RoleNotFoundException;
+import com.eztornado.tornadocorebase.models.*;
 import com.eztornado.tornadocorebase.payload.request.LoginRequest;
 import com.eztornado.tornadocorebase.payload.request.RecoveryPasswordAskRequest;
 import com.eztornado.tornadocorebase.payload.request.RecoveryPasswordUpdateRequest;
@@ -14,6 +13,7 @@ import com.eztornado.tornadocorebase.payload.response.ApiResponse;
 import com.eztornado.tornadocorebase.security.jwt.JwtUtils;
 import com.eztornado.tornadocorebase.security.services.UserDetailsImpl;
 import com.eztornado.tornadocorebase.services.RecoveryPasswordService;
+import com.eztornado.tornadocorebase.services.RoleService;
 import com.eztornado.tornadocorebase.services.SessionService;
 import com.eztornado.tornadocorebase.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,11 +29,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-import java.util.Date;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,16 +47,20 @@ public class AuthenticationController extends BaseController {
 
     private RecoveryPasswordService recoveryPasswordService;
 
+
+    private RoleService roleService;
+
     @Value("${tornadocore.registerEnabled}")
     private boolean registerEnabled;
 
     @Autowired
     JwtUtils jwtUtils;
 
-    public AuthenticationController(UserService userService, SessionService sessionService, RecoveryPasswordService recoveryPasswordService) {
+    public AuthenticationController(UserService userService, SessionService sessionService, RecoveryPasswordService recoveryPasswordService, RoleService roleService) {
         this.userService = userService;
         this.sessionService = sessionService;
         this.recoveryPasswordService = recoveryPasswordService;
+        this.roleService = roleService;
     }
 
     @PostMapping("/register")
@@ -84,7 +86,19 @@ public class AuthenticationController extends BaseController {
             errors.add("User exists");
             return ResponseEntity.badRequest().body(new ApiResponse<>("error",errors,"Validation errors"));
         }
+        //Establecer el usuario activo
         userDto.setActive(true);
+
+        // Establecer el rol del usuario
+        Optional<Role> role = roleService.findByName(ERole.ROLE_USER);
+        if(role == null) {
+            throw new RoleNotFoundException(ERole.ROLE_USER.name());
+        }
+        HashSet<Role> userRoles = new HashSet<Role>();
+        userRoles.add(role.get());
+        userDto.setRoles(userRoles);
+
+
         return  ResponseEntity.ok(new ApiResponse<>("success",userService.create(userDto),"User created successfully!"));
     }
 
